@@ -101,3 +101,6 @@ Pin labeled "SLEEP" (actually FTDI chip pin 12, TXEN)
 should be pulled down to GND with external 10k resistor.
 It can work even without this resistor if you don't
 mind retrying several times.
+
+See also https://github.com/mvvproject/ReVerSE-U16/tree/master/u16_board/modules/v2debug
+
