@@ -59,13 +59,13 @@ Connect on FT232R module (direct wires):
 Some pinouts on reverse-u16:
 
     --- edge of reverse-u16 board ---
-    --- near power        --- near usb ---
+    --- near power       --- near usb
     X8         X10       X3      
     ---------- -----     ------------------
     CP 1 5V  2 5V  1        GND 10 9  TDI     
-    CN 3 AP  2 GND 2     RESET#  8 7  PROG#
-    BP 5 AN  2 DN  3      DEBUG  6 5  TMS
-    BN 7 GND 2 DP  4      +3.3V  4 3  TDO
+    CN 3 AP  4 GND 2     RESET#  8 7  PROG#
+    BP 5 AN  6 DN  3      DEBUG  6 5  TMS
+    BN 7 GND 8 DP  4      +3.3V  4 3  TDO
                             GND  2 1  TCK
 
 # Programming
@@ -93,6 +93,9 @@ in the window:
 In about half a minute it should be done.
 
 # Troubleshooting
+
+If programming win V2PROG won't start, try to run FT900 Programming 
+utility first and then V2PROG. Maybe some pullup resistors are missing...
 
 Pin labeled "SLEEP" (actually FTDI chip pin 12, TXEN) 
 should be pulled down to GND with external 10k resistor.
