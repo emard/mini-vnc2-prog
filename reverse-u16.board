@@ -29,7 +29,7 @@ set_location_assignment PIN_25 -to CLK_50MHz
 set_location_assignment PIN_72 -to AN # DEBUG -> Reverse-U16 X3 pin 6 input/output 3-state
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to AN
 set_location_assignment PIN_71 -to AP # TXEN -> FT232R SLEEP
-#set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to AP
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to AP # it should actually be pull down
 set_location_assignment PIN_88 -to BN
 set_location_assignment PIN_89 -to BP
 set_location_assignment PIN_90 -to CN
@@ -140,7 +140,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SD_SO
 # -- USB
 set_location_assignment PIN_49 -to USB_CLK
 set_location_assignment PIN_51 -to USB_CS_N
-set_location_assignment PIN_31 -to USB_DBG
+set_location_assignment PIN_31 -to USB_DBG     # ??? this seems not be routed on rev.c board
 set_location_assignment PIN_55 -to USB_IO1
 set_location_assignment PIN_54 -to USB_IO3
 set_location_assignment PIN_30 -to USB_PROG_N
