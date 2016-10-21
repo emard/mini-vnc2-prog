@@ -30,8 +30,33 @@ FPGA in Reverse-U16 can be used instead of 74LV124.
 # Connecting
 
 On FT232R module set 5V/3.3V jumper into 3.3V position.
-Programming circuit can be assembled from 10 color wires with 
-female-female 1-pin sockets and a 10k resistor.
+Programming circuit can be assembled from few color wires
+with female-female 1-pin sockets and 10k resitor or similar 
+(it could be anything 1.5-50k).
+
+This is minimal wiring:
+
+    Module FT232R USBSERIAL
+    physical   chip   v2debug   10k                   program    wire
+    label      pin    signal    pull    uBUS   pin    header     color
+    ---------  ----   ------    ----    ----------    ---------  ------
+                                        AN  X8   6    DEBUG  6   violet
+    SLEEP      12     TXEN      down    AP  X8   4               brown
+    RXD               RXD               DP  X10  4               gray
+    TXD               TXD               DN  X10  3               white
+    GND               GND               GND X10  2               black
+
+    --- edge of reverse-u16 board ---
+    --- near power       --- near usb
+        X8     X10             X3
+    ---------- -----     ---------
+    1        2 1              10 9     
+    3  SLEEP-4 2-GND           8 7       
+    5  DEBUG-6 3-TXD     DEBUG-6 5     
+    7        8 4-RXD           4 3     
+                               2 1     
+
+This is full wiring:
 
     Module FT232R USBSERIAL
     physical   chip   v2debug    10k                  program    wire
@@ -39,9 +64,9 @@ female-female 1-pin sockets and a 10k resistor.
     ---------  ----   ------     ----   ----------    ---------  ------
                                         AN  X8   6    DEBUG  6   violet
     SLEEP      12     TXEN       down   AP  X8   4               brown
-    TEN        13     PROG#                           PROG#  7   green
+    TEN        13     PROG#      up                   PROG#  7   green
     PWREN      14     PWREN#       
-    RXL        22     RESET#                          RESET# 8   blue
+    RXL        22     RESET#     up                   RESET# 8   blue
     TXL        23     TXRXLED#     
     RXD               RXD               DP  X10  4               gray
     TXD               TXD               DN  X10  3               white
@@ -51,12 +76,10 @@ female-female 1-pin sockets and a 10k resistor.
     DTR         2     DTR               RSD
     RSD         9     DSR               DTR
 
-Connect on FT232R module (direct wires):
+    Connect on FT232R module (direct wires):
 
     RTS-CTS
     DTR-RSD (RSD is misnamed DSR)
-
-Some pinouts on reverse-u16:
 
     --- edge of reverse-u16 board ---
     --- near power       --- near usb
@@ -80,7 +103,55 @@ Upload it into the FPGA
 
 While the ReVerSE-u16 board is constantly powered,
 disconnect Altera-USB-blaster cable and connect VNC2
-programming cable (it needs only 3 pins: PROG#, RESET# and DEBUG).
+programming cable (a signle wire "DEBUG" seems to be 
+sufficient).
+
+Method 1: FT_PROG only
+
+    [EEPROM] -> DEVICES -> Scan and parse
+
+It will display some data about VII Debugger Module
+
+    [FLASH ROM]
+    Chip: VNC2
+    Device: VII Debugger Module
+    Programming interface: Debugger
+
+Select file and click
+    
+    Program
+
+Progress bar should run and in few seconds VNC2 is programmed.
+
+Method 2: using V2PROG
+
+For the first time application should initialize some
+internal settings in VNC2 and/or programming module.
+
+It could be done in 2 ways
+
+1. init by FT_PROG
+
+    [EEPROM] -> DEVICES -> Scan and parse
+
+exit FT_PROG.
+
+2. init by FT900 Programming utility
+
+Select option:
+
+    [x] Program via One-Wire interface
+
+And click
+
+    Next
+
+It will display something like
+
+    Device      Programmer             Programmer serial
+    No device   VII Debugger Module    FTxxxxx
+
+"No device" seems to be OK. Exit FT900 Programming utility.
 
 Launch V2PROG, select VNC2 ROM file and click "Program".
 TX led will start blinking fast and messages will appear
@@ -90,17 +161,13 @@ in the window:
     Writing Flash...
     Done
 
-In about half a minute it should be done.
+In few seconds it should be done.
 
 # Troubleshooting
 
-If programming win V2PROG won't start, try to run FT900 Programming 
-utility first and then V2PROG. Maybe some pullup resistors are missing...
-
 Pin labeled "SLEEP" (actually FTDI chip pin 12, TXEN) 
-should be pulled down to GND with external 10k resistor.
-It can work even without this resistor if you don't
-mind retrying several times.
+should be pulled down to GND with external pull down 
+resistor. It can work even without this resistor if 
+you don't mind retrying several times.
 
 See also https://github.com/mvvproject/ReVerSE-U16/tree/master/u16_board/modules/v2debug
-
