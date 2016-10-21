@@ -103,7 +103,7 @@ Upload it into the FPGA
 
 While the ReVerSE-u16 board is constantly powered,
 disconnect Altera-USB-blaster cable and connect VNC2
-programming cable (a signle wire "DEBUG" seems to be 
+programming cable (a single wire "DEBUG" seems to be 
 sufficient).
 
 Method 1: FT_PROG only
